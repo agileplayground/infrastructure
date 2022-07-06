@@ -1,0 +1,21 @@
+- hosts: all
+  become: true
+
+  tasks:
+    
+    - name: Wait untils Jenkins web API is available
+      shell: curl --head --silent http://localhost:8080/cli/
+      register: result
+      until: result.stdout.find("403 Forbidden") != -1
+      retries: 20
+      delay: 10
+
+    - name: Get Jenkins Password
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
+      become: yes
+      register: command_output
+      become_method: sudo
+      become_user: root
+    
+    - debug:
+         var: command_output.stdout_lines
