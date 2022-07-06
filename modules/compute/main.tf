@@ -49,15 +49,15 @@ resource "aws_eip" "jenkins_eip" {
   }
 }
 
-# resource "null_resource" "setupjenkins" {
-#   depends_on = [
-#     aws_instance.jenkins_server,
-#     aws_eip.jenkins_eip,
-#   ]
+resource "null_resource" "setupjenkins" {
+  depends_on = [
+    aws_instance.jenkins_server,
+    aws_eip.jenkins_eip,
+  ]
 
 
-#   //
-#   provisioner "local-exec" {
-#     command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ubuntu --private-key tutorial_kp.pem -i '${aws_eip.jenkins_eip.public_ip},' playbooks/main.yml"
-#   }
-# }
+  //
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ubuntu --private-key tutorial_kp.pem -i '${aws_eip.jenkins_eip.public_ip},' playbooks/main.yml"
+  }
+}
